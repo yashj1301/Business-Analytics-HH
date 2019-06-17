@@ -11,6 +11,7 @@ import seaborn as sns
 iris = sns.load_dataset("iris")
 iris.head()
 iris
+
 pd.options.display.max_rows
 print(pd.options.display.max_rows)
 pd.options.display.max_rows = 200
