@@ -10,7 +10,7 @@ print('on the first line', end=' ')
 
 
 print('on the second line')
-
+print(array)
 
 
 temp=eval(input('Enter the temperature in celsius: '))
