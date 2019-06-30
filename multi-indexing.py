@@ -42,4 +42,11 @@ pd.set_option('display.max_columns',20)
 data3=data2.set_index('gear',drop=True).head()
 data3.head(20)
 data3.reset_index().set_index('cyl').head()
+data3.set_index('cyl',append=True).set_index('am',append=True) #multiple indexing
+data_group_by_onecol=data2.groupby(['gear']).mpg.mean() #gear-wise mean mileage 
+type(data_group_by_onecol)
+
+data_group_by_twocol=data2.groupby(['gear','am']).mpg.mean() #gear-wise mean mileage of auto tx 
+data_group_by_twocol.index #multi-level indexing
+
 
