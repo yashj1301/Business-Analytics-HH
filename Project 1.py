@@ -50,16 +50,17 @@ cars_data.loc[cars_data.duplicated()]
 column_names=cars_data.columns.tolist()
 column_names
 
+
 #3. Visualizing the Data
 
 plt.figure(figsize=(10,10)) #plot size according to scale 1 unit=72 pixels
 plt.subplot(2,1,1) #2 rows, 1 column and index=1
 plt.title('Car Price Distribution Plot') #title for the chart 
-sns.distplot(cars_data['price']) #distribution plot for price of cars
+sns.distplot(cars_data['price']) #distplot for price of cars
 
 plt.subplot(2,1,2)
 plt.title('Car Price Spread')
-sns.boxplot(cars_data['price']) #distribution of price in the data using box plot
+sns.boxplot(cars_data['price']) #distribution of price in the data
 plt.show()
 
 """
@@ -78,12 +79,13 @@ plt.show()
     - aspiration            #
     - drivewheel            #
 
+
 """
 #1. Car Company
 
 plt.figure(figsize=(30, 15))
 
-#plot 1
+#plot 1.1
 plt.subplot(1,2,1)
 plt1 = cars_data['Company'].value_counts().plot('bar')
 plt.title('Companies Histogram')
@@ -96,7 +98,7 @@ for x,y in zip(xs,ys):
     plt.annotate(label,(x,y), textcoords="offset points",xytext=(5,5),ha='center') 
 plt.xticks(xs)
 
-#plot 2
+#plot 1.2
 plt.subplot(1,2,2)
 company_vs_price = pd.DataFrame(cars_data.groupby(['Company'])['price'].mean().sort_values(ascending = False))
 plt2=company_vs_price.index.value_counts().plot('bar')
@@ -117,7 +119,7 @@ plt.show()
 
 plt.figure(figsize=(25, 6))
 
-#plot 1
+#plot 2.1
 plt.subplot(1,2,1)
 plt.title('Fuel Type Chart')
 labels=cars_data['fueltype'].unique()
@@ -125,7 +127,7 @@ plt3 = cars_data['fueltype'].value_counts().tolist()
 plt.pie(plt3,labels=plt3, autopct='%1.1f%%')
 plt.legend(labels)
 
-#plot 2
+#plot 2.2
 plt.subplot(1,2,2)
 fuel_vs_price = pd.DataFrame(cars_data.groupby(['fueltype'])['price'].mean().sort_values(ascending = False))
 plt4=fuel_vs_price.index.value_counts().plot('bar')
@@ -215,6 +217,7 @@ plt.show()
 
 #6. Door Number 
  
+
 plt.figure(figsize=(25,10))
 
 #plot 1
@@ -249,6 +252,7 @@ plt.subplot(1,2,2)
 plt.title('Engine Location vs Price')
 sns.boxplot(x=cars_data['enginelocation'], y=cars_data['price'])
 plt.show()
+
 
 #8. Fuel System
 
@@ -300,7 +304,7 @@ plt.show()
 
 #10. Aspiration
 
-plt.figure(figsize=(25,10))
+plt.figure(figsize=(15,5))
 
 #plot 1
 plt.subplot(1,2,1)
@@ -334,3 +338,146 @@ plt.subplot(1,2,2)
 plt.title('Drive Wheel vs Price')
 sns.boxplot(x=cars_data['drivewheel'], y=cars_data['price'])
 plt.show()
+
+
+"""
+
+Numerical Variables 
+
+-Car Length                             #
+-Car Width                              #
+-Car Height                             #
+-Curb Weight                            #
+-Horsepower                             #
+-Bore Ratio                             #
+-Compression Ratio                      #
+-Highway miles per gallon (mpg)         #        
+-Engine Size                            #                  
+-Stroke                                 #
+-City Miles per gallon (mpg)            #
+-Peak Revolutions per Minute (rpm)      #
+-Wheel Base                             #
+ 
+
+"""
+
+def scatterplot(df,var):
+    
+    plt.scatter(df[var],df['price'])
+    plt.xlabel(var); plt.ylabel('Price')
+    plt.title('Scatter Plot for '+var+' vs Price')
+    
+
+#1. Car Length, Width and Height
+
+    plt.figure(figsize=(15,20))
+    plt.subplot(4,2,1)
+    scatterplot(cars_data,'carlength')    
+    plt.subplot(4,2,2)
+    scatterplot(cars_data,'carwidth')
+    plt.subplot(4,2,3)
+    scatterplot(cars_data,'carheight')
+    plt.show()
+    plt.tight_layout()
+    
+#2. Creating a new variable- Car Volume
+
+    cars_data['carvolume']=cars_data['carlength']*cars_data['carwidth']*cars_data['carheight']    
+    cars_data['carvolume'].unique()
+    scatterplot(cars_data,'carvolume')
+
+#3. Curb Weight (Effective Weight of Car including its internal components), HorsePower, Boreratio, and Compression Ratio
+    
+    plt.figure(figsize=(15,20))
+    plt.subplot(4,2,1)
+    scatterplot(cars_data,'curbweight')    
+    plt.subplot(4,2,2)
+    scatterplot(cars_data,'horsepower')
+    plt.subplot(4,2,3)
+    scatterplot(cars_data,'boreratio')
+    plt.subplot(4,2,4)
+    scatterplot(cars_data,'compressionratio')
+    plt.show()
+    plt.tight_layout()    
+    
+#4. Creating a new Variable - Fuel Economy
+
+    cars_data['fueleconomy']=(cars_data['citympg']*0.55)+(cars_data['highwaympg']*0.45)      
+    cars_data['fueleconomy'].unique()
+    scatterplot(cars_data,'fueleconomy')
+
+#5. Creating a Categorical Variable - Car Class
+    
+    price=cars_data['price'].tolist()
+    price
+    carsrange=[]
+    for i in cars_data['price']:
+        if (i>0 and i<9000): carsrange.append('Low')
+        elif (i>9000 and i<18000): carsrange.append('Medium-Low')
+        elif (i>18000 and i<27000): carsrange.append('Medium')
+        elif(i>27000 and i<36000): carsrange.append('High-Medium')
+        else : carsrange.append('High')
+    cars_data['carsrange']=carsrange
+    cars_data['carsrange'].unique()
+
+#plot
+plt.figure(figsize=(5,5))
+plt14 = cars_data['carsrange'].value_counts().plot('bar')
+plt.title('Cars Range Histogram')
+plt14.set(xlabel = 'Car Range', ylabel='Frequency')
+xs=cars_data['carsrange'].unique()
+ys=cars_data['carsrange'].value_counts()
+plt.bar(xs,ys)
+for x,y in zip(xs,ys):
+    label = "{:.2f}".format(y)
+    plt.annotate(label,(x,y), textcoords="offset points",xytext=(0,2),ha='center') 
+plt.xticks(xs)
+
+ 
+#6. Highway mpg and City mpg 
+
+sns.pairplot(cars_data, x_vars=['highwaympg','citympg'], y_vars='price', height=4, aspect=1, kind='scatter')   
+
+#7. Bore Ratio and Compression Ratio
+
+sns.pairplot(cars_data, x_vars=['boreratio','compressionratio'], y_vars='price', height=4, aspect=1, kind='scatter')   
+
+#8. Engine Size, Stroke, RPM and Wheelbase
+        
+    plt.figure(figsize=(15,20))
+    plt.subplot(4,2,1)
+    scatterplot(cars_data,'enginesize')    
+    plt.subplot(4,2,2)
+    scatterplot(cars_data,'stroke')
+    plt.subplot(4,2,3)
+    scatterplot(cars_data,'peakrpm')
+    plt.subplot(4,2,4)
+    scatterplot(cars_data,'wheelbase')
+    plt.show()
+    plt.tight_layout()    
+
+#Correlation with price(target variable)
+    
+corr=cars_data.corr().round(3).loc['price']
+corr=pd.DataFrame(corr)
+corr
+result=[]
+    for i in corr['price']:
+        if (i>-1 and i<-0.4): result.append('strong negative ')
+        elif (i>-0.4 and i<-0.2): result.append('moderate negative ')
+        elif (i>-0.2 and i<0): result.append('weak negative ')
+        elif(i>0 and i<0.2): result.append('weak positive')
+        elif(i>0.2 and i<0.5): result.append('moderate positive')
+        else : result.append('strong positive')
+    
+corr['correlation']=result
+corr['correlation'].value_counts()
+
+plt.figure(figsize=(10,10))
+plt.title('Correlation Chart')
+labels=corr['correlation'].unique()
+plt15 = corr['correlation'].value_counts().tolist()
+plt.pie(plt15, labels=plt15, autopct='%1.1f%%')
+plt.legend(labels, loc=1)
+
+
