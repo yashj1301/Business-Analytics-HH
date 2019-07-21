@@ -5,6 +5,9 @@ Created on Fri Jul 19 14:26:37 2019
 
 @author: yash_j1301
 """
+#-----------------------------------------------------------------------------------------------------------------------#
+#                                       Project 2 - Human Resource (HR) Analytics 
+#-----------------------------------------------------------------------------------------------------------------------#
 
 import pandas as pd
 import numpy as np
@@ -128,7 +131,7 @@ y=hr_data['left']
 #creating regression model
 
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 from sklearn import metrics
 logreg = LogisticRegression()
 logreg.fit(x_train, y_train)
@@ -137,6 +140,15 @@ y_pred=logreg.predict(x_test)
 from sklearn.metrics import accuracy_score
 print('Logistic regression accuracy: ',(accuracy_score(y_test,y_pred )*100).round(3),'%') #accuracy score of the model
 
+y_pred=pd.DataFrame(y_pred)
+
+y_test=pd.DataFrame(y_test)
+y_test=y_test.reset_index(drop=True)
+
+p=pd.concat([y_test, y_pred], axis=1)
+p=p.rename(columns={0:'pred_left'})
+
+#random forest 
 from sklearn.ensemble import RandomForestClassifier
 rf=RandomForestClassifier()
 rf.fit(x_train,y_train)
@@ -148,15 +160,22 @@ print('Random Forest accuracy: ',acc.round(3),'%') #accuracy score of the model
 rf_pred[0].value_counts()
 rf_pred.index
 
-y_pred=pd.DataFrame(y_pred)
+#changing to dataframe for plotting
 
-y_test=pd.DataFrame(y_test)
-y_test=y_test.reset_index(drop=True)
-
-p=pd.concat([y_test, y_pred], axis=1)
-p=p.rename(columns={0:'pred_left'})
-plt.figure()
+plt.figure(figsize=(10,5))
+plt.subplot(1,2,1)
+plt.title('Actual left')
+plt.xlabel('Index')
+plt.ylabel('Frequency')
 p['left'].value_counts().plot('bar')
+plt.subplot(1,2,2)
+plt.title('Predicted left')
+plt.xlabel('Index')
+plt.ylabel('Frequency')
+p['pred_left'].value_counts().plot('bar')
+plt.show()
+
+#validation techniques - confusion matrix for logistic regression
 
 from sklearn.metrics import confusion_matrix
 cm=confusion_matrix(y_test,y_pred)
@@ -164,6 +183,28 @@ cm
 
 cm_rf=confusion_matrix(y_test,rf_pred)
 cm_rf
+
+#validation techniques - K-fold for random forest
+from sklearn import model_selection
+from sklearn.model_selection import cross_val_score,KFold
+kfold = KFold(n_splits=15, random_state=100)
+modelCV = RandomForestClassifier()
+scoring = 'accuracy'
+results = model_selection.cross_val_score(modelCV, x_test, y_test, cv=kfold, scoring=scoring)
+print("15-fold cross validation average accuracy: ",((results.mean())*100).round(3),'%')
+
+#classification report to check generalisation of data
+from sklearn.metrics import classification_report
+print(classification_report(y_test, rf_pred)) #random forest report
+print(classification_report(y_test, y_pred)) #logistic regression report
+ 
+a=rf.predict_proba(x_test) #predicted probability
+a=pd.DataFrame(a)
+a.loc[:,0] #probability for 0 - didn't leave 
+a.loc[:,1] #probability for 1 - left  
+
+
+#roc curve
 from sklearn.metrics import roc_curve, roc_auc_score
 fpr,tpr,threshold=roc_curve(y_test,y_pred)
 fpr_rf,tpr_rf,threshold_rf=roc_curve(y_test,rf_pred)
@@ -181,4 +222,9 @@ plt.ylim([0,1])
 plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
 plt.show()
+
+#-----------------------------------------------------------------------------------------------------------------------#
+#                                                        Project End
+#-----------------------------------------------------------------------------------------------------------------------#
+
 
