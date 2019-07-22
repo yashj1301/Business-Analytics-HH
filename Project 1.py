@@ -471,6 +471,7 @@ for i in corr['price']:
     
 corr['correlation']=result
 corr['correlation'].value_counts()
+corr['price'].unique()
 
 plt.figure(figsize=(10,10))
 plt.title('Correlation Chart')
@@ -607,7 +608,6 @@ x_train_new=x_train_new.drop(['three'],axis=1)
 #Model 4
 model_4=buildmodel(x_train_new,y_train)
 
-x_train_new=x_train_new.drop(['hardtop'],axis=1)
 
 #This is the final model. Hence, it will be named as f_model.
 f_model=model_4
@@ -689,10 +689,21 @@ rf_pred
 acc_rf=r2_score(y_test, rf_pred)
 print('The Accuracy Score is : ',(acc_rf*100).round(3),'%') #Accuracy Score with Random Forest Regressor
 
+#Plot for Actual vs Predicted Price
 c= [i for i in range(1,83,1)] # generating index 
 fig = plt.figure(figsize=(15,5)) 
 plt.plot(c,y_test, color="blue", linewidth=2.5, linestyle="-") #Plotting Actual
 plt.plot(c,rf_pred, color="red",  linewidth=2.5, linestyle="-") #Plotting predicted
+fig.suptitle('Actual and Predicted', fontsize=20)              # Plot heading 
+plt.xlabel('Index', fontsize=18)                               # X-label
+plt.ylabel('Car Price', fontsize=16)                       # Y-label
+
+price.columns
+
+c= [i for i in range(1,83,1)] # generating index 
+fig = plt.figure(figsize=(15,5)) 
+plt.plot(c,p['price'], color="blue", linewidth=2.5, linestyle="-") #Plotting Actual
+plt.plot(c,p['pred_price'], color="red",  linewidth=2.5, linestyle="-") #Plotting predicted
 fig.suptitle('Actual and Predicted', fontsize=20)              # Plot heading 
 plt.xlabel('Index', fontsize=18)                               # X-label
 plt.ylabel('Car Price', fontsize=16)                       # Y-label
