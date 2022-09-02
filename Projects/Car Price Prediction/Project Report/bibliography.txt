@@ -1,0 +1,8 @@
+https://arxiv.org/pdf/1711.06970.pdf
+https://github.com/akjadon/Finalprojects_DS/tree/master/Car_pricing_prediction
+https://en.wikipedia.org/wiki/Dummy_variable_(statistics
+https://en.wikipedia.org/wiki/Linear_regression
+https://en.wikipedia.org/wiki/Variance_inflation_factor
+https://www.kaggle.com/goyalshalini93/car-price-prediction-linear-regression-rfe
+https://en.wikipedia.org/wiki/Random_forest
+

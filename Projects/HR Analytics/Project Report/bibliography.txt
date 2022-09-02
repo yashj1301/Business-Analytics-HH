@@ -1,0 +1,6 @@
+https://www.cgi.com/sites/default/files/hr_whitepaper.pdf
+https://www.academia.edu/39249197/HR_ANALYTICS_A_MODERN_TOOL_IN_HR_FOR_PREDICTIVE_DECISION_MAKING
+https://en.wikipedia.org/wiki/Logistic_regression
+https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
+https://machinelearningmastery.com/k-fold-cross-validation/
+https://github.com/akjadon/Finalprojects_DS/tree/master/HR_Analytics
